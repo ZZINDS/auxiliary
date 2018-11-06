@@ -1,0 +1,28 @@
+{% extends base_template %}
+{% load i18n %}
+
+
+{% block extrastyle %}{{ block.super }}
+    <style type="text/css">
+        .form-signout h2, .form-signout p {
+            margin-bottom: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="panel panel-default form-signout panel-single" style="max-width: 300px;">
+            <div class="panel-body">
+                <h2 class="text-success">注册成功</h2>
+                <p>请通知管理员激活账号</p>
+                <p class="btn-group">
+                    <a href="/" class="btn btn-primary">去登录</a>
+                </p>
+            </div>
+        </div>
+
+    </div> <!-- /container -->
+
+{% endblock %}

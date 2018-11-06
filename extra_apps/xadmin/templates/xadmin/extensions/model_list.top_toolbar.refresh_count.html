@@ -1,0 +1,41 @@
+{% load i18n %}
+<div class="btn-group export">
+    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="modal" data-target="#2msg_query_score" href="#"
+       onclick="refresh_count()">
+        <i class="fa fa-refresh"></i>&nbsp;&nbsp;刷新
+    </a>
+
+    <script>
+        function refresh_count() {
+            $.get("/count/", function (data, status) {
+                $(location).attr('href', '');
+                {#alert(data.msg);#}
+            });
+
+        }
+    </script>
+    <div id="msg_query_score" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="">{% csrf_token %}
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">买手分组</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <span class="input-group-addon">标签</span>
+                            <input name="tag" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="buyer_list" value="" id="buyer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                        <button class="btn btn-success" type="submit" onclick="get_buyer()">确认</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

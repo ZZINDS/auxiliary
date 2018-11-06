@@ -1,0 +1,14 @@
+{% load i18n %}
+<div class="btn-group export">
+    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="modal" data-target="#2msg_query_score" href="#"
+       onclick="queue_all()">
+        全部队列
+    </a>
+    <script>
+        function queue_all() {
+            $.get("/?", function (data, status) {
+                $(location).attr('href', '/message/queue/');
+            });
+        }
+    </script>
+</div>

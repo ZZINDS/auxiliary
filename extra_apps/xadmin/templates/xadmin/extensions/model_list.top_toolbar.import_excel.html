@@ -1,0 +1,80 @@
+{% load i18n %}
+<div class="btn-group export">
+    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="modal" href="#"
+       data-target="#export-modal-import-csv">
+        导入
+    </a>
+    {#  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">#}
+    {#      <li><a data-toggle="modal" data-target="#export-modal-import-excel"><i class="icon-circle-arrow-down"></i> 导入 CSV</a></li>#}
+    {#  </ul>#}
+    <script>
+        function fileChange(target) {
+//检测上传文件的类型
+            var imgName = document.all.submit_upload.value;
+            var ext, idx;
+            if (imgName == '') {
+                document.all.submit_upload_b.disabled = true;
+                alert("请选择需要上传的 csv 文件!");
+                return;
+            } else {
+                idx = imgName.lastIndexOf(".");
+                if (idx != -1) {
+                    ext = imgName.substr(idx + 1).toUpperCase();
+                    ext = ext.toLowerCase();
+                    {#                    alert("ext="+ext);#}
+                    if (ext != 'csv' && ext != 'csv') {
+                        document.all.submit_upload_b.disabled = true;
+                        alert("只能上传 .csv 类型的文件!");
+
+                        return;
+                    }
+                } else {
+                    document.all.submit_upload_b.disabled = true;
+                    alert("只能上传 .csv 类型的文件!");
+                    return;
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "{% url "site" %}",
+                async: true,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#site-select").append("<option>" + data[i].site + "</option>");
+                    }
+                }
+            });
+        })
+    </script>
+    <div id="export-modal-import-csv" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">导入 CSV</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <input type="file" onchange="fileChange(this)" name="csv" id="submit_upload">
+                        </div>
+                        <select class="form-control" style="margin:20px 0" id="site-select" name="site">
+                            <option class="item">--- 请选择站点 ---</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                        <button class="btn btn-success" type="submit" id="submit_upload_b"><i class="icon-share"></i> 确认
+                        </button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+
+</div>

@@ -1,0 +1,94 @@
+{% load i18n %}
+{% load staticfiles %}
+<div class="btn-group export">
+    {#    dropdown-toggle btn btn-default btn-sm#}
+    <a class="dropdown-toggle btn btn-success btn-sm" data-toggle="modal" data-target="#msgs_rule"
+       href="add/" data-am-modal="{target: '#my-alert'}">
+        新增
+    </a>
+    {#    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">#}
+    {#        <i class="icon-share"></i> 导入 <span class="caret"></span>#}
+    {#    </a>#}
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}" media="screen" title="no title" charset="utf-8">
+    <script src="{% static 'js/amazeui.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/amazeui.min.css' %}"/>
+
+    <script>
+        function test2() {
+            var arr = [];
+            $(".grid-item.warning").each(function () {
+                arr.push($(this).children('td').eq(1).text().replace(/(^\s*)|(\s*$)/g, ""));
+                {# .html().replace(/(^\s*)|(\s*$)/g, "")) #}
+            });
+            {#alert(arr);#}
+            $.get("/?", function (data, status) {
+                $(location).attr('href', 'add/');
+            });
+        }
+
+    </script>
+
+    <div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
+        <div class="am-modal-dialog am-radius">
+            <div class="am-modal-hd">新建
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd">
+                <div class="tpl-block ">
+                    <div class="am-g tpl-amazeui-form">
+                        <form class="am-form am-form-task am-form-horizontal" method="post" action="insert/">
+                            {% csrf_token %}
+                            <input class="id" type="hidden" name="id" id="id_id">
+                            {% for form in forms %}
+                                <div class="am-form-group">
+                                    <label for="{{ form.id_for_label }}"
+                                           class="am-u-sm-3 am-form-label">{{ form.label }}</label>
+                                    <div class="am-u-sm-9" style="width: 350px;padding-right: 60px;" >
+                                        {{ form }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="am-form-group">
+                                <button type="submit" class="am-btn am-btn-primary am-radius">保存</button>
+                            </div>
+                            {{ forms.non_field_errors }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="msg_rule" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">关于</h4>
+                </div>
+                <div class="modal-body">
+                    {{ about_content|safe }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                    <button class="btn btn-success" type="button" data-dismiss="modal" onclick="test2()"
+                            id="submit_upload_b"><i class="icon-share"></i>确认
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/amazeui.datetimepicker.js' %}"></script>
+<script src="{% static 'js/amazeui.datetimepicker.min.js' %}"></script>
+<script type="application/javascript">
+    $(function () {
+        $('#id_starttime').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            pickerPosition: "top-right",
+            startDate: new Date()
+        });
+    });
+</script>

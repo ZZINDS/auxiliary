@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load static %}
+<div class="btn-group export">
+    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="modal" data-target="#2msg_query_score" href="#"
+       onclick="queue_begin()">
+        允许
+    </a>
+    <script>
+        function queue_begin() {
+            {#alert('允许');#}
+            var arr = [];
+            $(".grid-item.warning").each(function () {
+                {#alert($(this).children('td').eq(2).html());#}
+                arr.push($(this).children('td').eq(2).text().replace(/(^\s*)|(\s*$)/g, ""))
+            });
+
+            if (arr.length == 0) {
+                alert('请选中需要允许的队列！');
+            }
+            else {
+                {#alert(arr);#}
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "{% url "begin" %}",
+                    data: {
+                        {#csrfmiddlewaretoken:{{ csrf_token }},#}
+                        'buyer_list': arr
+                    },
+                    async: true,
+                    success: function (data) {
+                        if (data.status == 'fail') {
+                            alert(data.msg);
+                        } else if (data.status == 'success') {
+                            $(location).attr('href', '');
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</div>

@@ -1,0 +1,99 @@
+{% load i18n %}
+{% load xadmin_tags %}
+<div class="btn-group export">
+    <a class="dropdown-toggle btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteSource2"
+       onclick="delete_all()"
+       href="#" style="margin-left: 5px">
+        批量删除
+    </a>
+    {#    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">#}
+    {#        <i class="icon-share"></i> 导入 <span class="caret"></span>#}
+    {#    </a>#}
+
+    <script>
+        var arr = [];
+
+        function delete_all() {
+            {#alert('允许');#}
+            arr = [];
+            $(".grid-item.warning").each(function () {
+                {#alert($(this).children('td').eq(2).html());#}
+                {#arr.push($(this).children('td').eq(2).text().replace(/(^\s*)|(\s*$)/g, ""))#}
+                arr.push($(this).find("td:eq(0)").find("input").val().replace(/(^\s*)|(\s*$)/g, ""))
+            });
+            $("#count").text(arr.length);
+            {#if (arr.length != 0) {#}
+            {#    alert(arr.length);#}
+            {# #}
+        }
+
+        function remove_rows() {
+            $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: 'delete/',
+                    data: {"del_id": arr},
+                    async: true,
+                    success: function (data) {
+                        if (data.status == "success") {
+                            alert(data.msg);
+                        }
+                    }
+                }
+            );
+
+            $(".grid-item.warning").each(function () {
+                {#alert($(this).children('td').eq(2).html());#}
+                $(this).remove()
+            });
+            $('#span_count').html(Number($('#span_count').html())-arr.length);
+
+        }
+
+        {#else {#}
+        {#alert(arr);#}
+        {#    $.ajax({#}
+        {#        cache: false,#}
+        {#        type: "POST",#}
+        {#        url: "{% url "begin" %}",#}
+        {#        data: {#}
+        {#csrfmiddlewaretoken:{{ csrf_token }},#}
+        {#            'buyer_list': arr#}
+        {#        },#}
+        {#        async: true,#}
+        {#        success: function (data) {#}
+        {#            if (data.status == 'fail') {#}
+        {#                alert(data.msg);#}
+        {#            } else if (data.status == 'success') {#}
+        {#                $(location).attr('href', '');#}
+        {#            }#}
+        {#        }#}
+        {#    });#}
+
+    </script>
+    <!--弹出删除资源警告窗口-->
+    <div class="modal fade" id="deleteSource2" role="dialog" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        确定要删除<span id="count"></span>条记录？删除后不可恢复！
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn  btn-primary" data-dismiss="modal">取 消</button>
+                    <button type="button" class="btn  btn-danger" data-dismiss="modal" onclick="remove_rows()">确
+                        认
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>

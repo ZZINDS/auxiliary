@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load static %}
+<div class="btn-group export">
+    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="modal" data-target="#2msg_query_score" href="#"
+       onclick="cart_end()">
+        停止
+    </a>
+    <script>
+        function cart_end() {
+            {#alert('允许');#}
+            var arr = [];
+            $(".grid-item.warning").each(function () {
+                {#alert($(this).children('td').eq(2).html());#}
+                arr.push($(this).children('td').eq(1).text().replace(/(^\s*)|(\s*$)/g, ""))
+            });
+
+            if (arr.length == 0) {
+                alert('请选中需要停止的任务！');
+            }
+            else {
+                {#alert(arr);#}
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "{% url "cart_end" %}",
+                    data: {
+                        {#csrfmiddlewaretoken:{{ csrf_token }},#}
+                        'asin_list': arr
+                    },
+                    async: true,
+                    success: function (data) {
+                        if (data.status == 'fail') {
+                            alert(data.msg);
+                        } else if (data.status == 'success') {
+                            $(location).attr('href', '');
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</div>

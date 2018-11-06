@@ -1,0 +1,14 @@
+{% load i18n %}
+<div class="btn-group export">
+    <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="modal" data-target="#2msg_query_score" href="#"
+       onclick="queue_normal()">
+        正常队列
+    </a>
+    <script>
+        function queue_normal() {
+            $.get("/?", function (data, status) {
+                $(location).attr('href', '/message/queue/?_p_status__exact=1&_p_allow__exact=1&_p_follow__exact=1/');
+            });
+        }
+    </script>
+</div>
